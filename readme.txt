@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, shorttag, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz
 Requires at least: 3.3.1 
-Stable tag: 1.2
+Stable tag: 1.3
 Tested up to: 3.3.2
 
 == Description ==
@@ -52,6 +52,9 @@ Numerous updates and some improvements.
 
 = 1.2 =
 Enabled multilingual support.
+
+= 1.3 =
+Fixed a typo.
 
 == Upgrade Notice ==
 
