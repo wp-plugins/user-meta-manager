@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: User Meta Manager allows administratiors to add, edit, or delete user meta data. User   Meta Manager also provides a shorttag for inserting user meta data into posts or pages. <strong>To display data for a particular user:</strong> <code>[usermeta key="meta key" user="user id"]</code> <strong>To display data for the current user:</strong> <code>[usermeta key="meta key"]</code> An additional shorttag is available for restricting user access based on a meta key and value or user ID. <strong>To restrict access based on meta key and value:</strong> <code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed users will have a matching meta value. <strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed user IDs are listed in the users attribute.
- * Version: 1.0
+ * Version: 1.1
  * Author: Jason Lau
  * Author URI: http://websitedev.biz
  * Disclaimer: Use at your own risk. No warranty expressed or implied.
@@ -31,7 +31,7 @@
 }
 
 define('UMM', null);
-define('UMM_VERSION', '1.0');
+define('UMM_VERSION', '1.1');
 define("UMM_PATH", ABSPATH . 'wp-content/plugins/user-meta-manager/');
 
 if(!class_exists('WP_List_Table')):
@@ -62,8 +62,8 @@ function editusermeta(){
     <table class="umm_edit_table">
     <thead>
     <tr>
-      <th>Key</th>
-      <th>Value</th>
+      <th>'.__('Key', 'user-meta-manager').'</th>
+      <th>'.__('Value', 'user-meta-manager').'</th>
     </tr>
   </thead>
     ';
@@ -72,10 +72,11 @@ function editusermeta(){
     }
     $output .= '</table>
     <div class="updateusermeta-result hidden"></div>
-    <input id="updateusermeta_submit" class="button-primary" type="submit" value="Update" />
+    <input id="updateusermeta_submit" class="button-primary" type="submit" value="'.__('Update', 'user-meta-manager').'" />
     <input name="mode" type="hidden" value="edit" /><input name="u" type="hidden" value="' . $user_id . '" /><input name="return_page" type="hidden" value="admin-ajax.php?action=editusermeta&width=600&height=500&u=' . $user_id . '" />
     </form>  
     ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Be careful when editing items. Editing an item here will only edit the item for the selected user and not for all users. Not all users share the same meta keys.<br /><a href="admin-ajax.php?action=editcustommeta&amp;width=600&amp;height=500&amp;u=1" title="Edit Custom Meta" class="thickbox">Edit Custom Meta Data For All Users</a>').'</p>';
     print $output;
     exit;
 }
@@ -88,21 +89,22 @@ function addusermeta(){
     <table class="umm_add_table">
     <thead>
     <tr>
-      <th>Key</th>
-      <th>Default Value</th>
+      <th>'.__('Key', 'user-meta-manager').'</th>
+      <th>'.__('Default Value', 'user-meta-manager').'</th>
     </tr>
   </thead>
-    <tr><td><input name="meta_key" type="text" value="" placeholder="Meta Key" /></td><td><input name="meta_value" type="text" value=\'\' size="40" placeholder="Meta Default Value" /> </td></tr>
-    <tr><td>All Users</td><td><select name="all_users" size="1">
-	<option value="false">No</option>
-	<option value="true">Yes</option>
+    <tr><td><input name="meta_key" type="text" value="" placeholder="'.__('Meta Key', 'user-meta-manager').'" /></td><td><input name="meta_value" type="text" value=\'\' size="40" placeholder="'.__('Meta Default Value', 'user-meta-manager').'" /> </td></tr>
+    <tr><td>'.__('All Users', 'user-meta-manager').'</td><td><select name="all_users" size="1">
+	<option value="false">'.__('No', 'user-meta-manager').'</option>
+	<option value="true">'.__('Yes', 'user-meta-manager').'</option>
 </select></td></tr>';
     $output .= '</table>
     <div class="updateusermeta-result hidden"></div>
-    <input id="updateusermeta_submit" class="button-primary" type="submit" value="Update" />
+    <input id="updateusermeta_submit" class="button-primary" type="submit" value="'.__('Update', 'user-meta-manager').'" />
     <input name="mode" type="hidden" value="add" /><input name="u" type="hidden" value="' . $user_id . '" /><input name="return_page" type="hidden" value="admin-ajax.php?action=addusermeta&width=600&height=500&u=' . $user_id . '" />
     </form>  
     ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Insert a meta key and default value and press <em>Update</em>. Select <em>All Users</em> to add the meta key and default value to all users. New registrations will receive the meta key and default value.').'</p>';
     print $output;
     exit;
 }
@@ -113,24 +115,104 @@ function deleteusermeta(){
     $user_id = $_REQUEST['u'];
     $data = $wpdb->get_results("SELECT * FROM $wpdb->usermeta WHERE user_id = $user_id");
     $output = '<form id="updateusermeta_form" method="post">
-    <strong>Meta Key:</strong> <select name="meta_key" class="umm_meta_key_menu">
-    <option value="">Select A Meta Key</option>
+    <strong>'.__('Meta Key', 'user-meta-manager').':</strong> <select name="meta_key" class="umm_meta_key_menu">
+    <option value="">'.__('Select A Meta Key', 'user-meta-manager').'</option>
     ';
     foreach($data as $d){
         $output .= "<option value=\"".$d->meta_key ."\">".$d->meta_key ."</option>";
     }
     $output .= '</select><br />
-    <strong>All Users:</strong> <select name="all_users" size="1">
-	<option value="false">No</option>
-	<option value="true">Yes</option>
+    <strong>'.__('All Users', 'user-meta-manager').':</strong> <select name="all_users" size="1">
+	<option value="false">'.__('No', 'user-meta-manager').'</option>
+	<option value="true">'.__('Yes', 'user-meta-manager').'</option>
 </select><br />
     <div class="updateusermeta-result hidden"></div>
-    <input id="updateusermeta_submit" class="button-primary" type="submit" value="Delete" />
+    <input id="updateusermeta_submit" class="button-primary button-delete" type="submit" value="'.__('Delete', 'user-meta-manager').'" />
     <input name="mode" type="hidden" value="delete" /><input name="u" type="hidden" value="' . $user_id . '" /><input name="return_page" type="hidden" value="admin-ajax.php?action=deleteusermeta&width=600&height=500&u=' . $user_id . '" />
     </form>  
     ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Be careful when selecting items to delete. This cannot be undone. Select <em>All Users</em> to delete the selected item from all users.').'</p>';
     print $output;
     exit;
+}
+
+add_action('wp_ajax_editcustommeta','editcustommeta');
+function editcustommeta(){
+    global $wpdb;
+    $data = get_option('user_meta_manager_data');
+    $output = '<form id="updateusermeta_form" method="post">
+    <table class="umm_edit_table">
+    <thead>
+    <tr>
+      <th>'.__('Key', 'user-meta-manager').'</th>
+      <th>'.__('Value', 'user-meta-manager').'</th>
+    </tr>
+  </thead>
+    ';
+    if(!$data){
+       $output .= "<tr><td colspan=\"2\">".__('No custom meta to display.', 'user-meta-manager')."</td></tr>"; 
+    } else {
+        foreach($data as $key => $value){
+            $output .= "<tr><td>".$key ."</td><td><input name=\"meta_key[]\" type=\"hidden\" value=\"". $key ."\" /><input name=\"meta_value[]\" type=\"text\" value='". $value ."' size=\"40\" /> </td></tr>";
+        }
+    }  
+    $output .= '</table>
+    <div class="updateusermeta-result hidden"></div>
+    <input id="updateusermeta_submit" class="button-primary" type="submit" value="'.__('Update', 'user-meta-manager').'" />
+    <input name="mode" type="hidden" value="edit" /><input name="u" type="hidden" value="all" /><input name="return_page" type="hidden" value="admin-ajax.php?action=editcustommeta&width=600&height=500&u=' . $user_id . '" />
+    </form>  
+    ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Editing custom meta data here will edit the value for all existing users. The value you set will become the default value for all users. New registrations will receive the custom meta key and default value.', 'user-meta-manager').'</p>';
+    print $output;
+    exit;
+}
+
+add_action('wp_ajax_addcustommeta','addcustommeta');
+function addcustommeta(){
+    global $wpdb;
+    $user_id = $_REQUEST['u'];
+    $output = '<form id="updateusermeta_form" method="post">
+    <table class="umm_add_table">
+    <thead>
+    <tr>
+      <th>'.__('Key', 'user-meta-manager').'</th>
+      <th>'.__('Default Value', 'user-meta-manager').'</th>
+    </tr>
+  </thead>
+    <tr><td><input name="meta_key" type="text" value="" placeholder="'.__('Meta Key', 'user-meta-manager').'" /></td><td><input name="meta_value" type="text" value=\'\' size="40" placeholder="'.__('Meta Default Value', 'user-meta-manager').'" /> </td></tr>
+    ';
+    $output .= '</table>
+    <div class="updateusermeta-result hidden"></div>
+    <input id="updateusermeta_submit" class="button-primary" type="submit" value="'.__('Update', 'user-meta-manager').'" />
+    <input name="all_users" type="hidden" value="true" /><input name="mode" type="hidden" value="add" /><input name="u" type="hidden" value="all" /><input name="return_page" type="hidden" value="admin-ajax.php?action=addcustommeta&width=600&height=500&u=0" />
+    </form>  
+    ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Adding custom meta data will add the meta key and value to all existing users. The value you set will become the default value for all users. New registrations will receive the custom meta key and default value.', 'user-meta-manager').'</p>';
+    print $output;
+    exit;
+}
+
+add_action('wp_ajax_deletecustommeta','deletecustommeta');
+function deletecustommeta(){
+    global $wpdb;
+    $data = get_option('user_meta_manager_data');
+    $output = '<form id="updateusermeta_form" method="post">
+    <strong>'.__('Meta Key', 'user-meta-manager').':</strong> <select name="meta_key" class="umm_meta_key_menu">
+    <option value="">'.__('Select A Meta Key', 'user-meta-manager').'</option>
+    ';
+    if($data){
+       foreach($data as $key => $value){
+        $output .= "<option value=\"".$key ."\">".$key ."</option>";
+       } 
+    }   
+    $output .= '</select><br />
+    <div class="updateusermeta-result hidden"></div>
+    <input id="updateusermeta_submit" class="button-primary button-delete" type="submit" value="'.__('Delete', 'user-meta-manager').'" />
+    <input name="all_users" type="hidden" value="true" /><input name="mode" type="hidden" value="delete" /><input name="u" type="hidden" value="all" /><input name="return_page" type="hidden" value="admin-ajax.php?action=deletecustommeta&width=600&height=500&u=0" />
+    </form>  
+    ';
+    $output .= '<br/><hr><h3>'.__('FYI', 'user-meta-manager').'</h3><p>'.__('Deleting custom meta data here will delete the meta key and value for all existing users. New registrations will no longer receive the custom meta key and default value.', 'user-meta-manager').'</p>';
+    print $output;
     exit;
 }
 
@@ -151,16 +233,33 @@ function updateusermeta(){
         } else {
             update_user_meta($_POST['u'], $_POST['meta_key'], $_POST['meta_value'], false);
         }
-        $output = 'Meta data successfully added.';
+        $output = __('Meta data successfully added.', 'user-meta-manager');
         break;
         
         case "edit":
         $x = 0;
-        foreach($_POST['meta_key'] as $key){
-            update_user_meta($_POST['u'], $key, trim(stripslashes($_POST['meta_value'][$x])));
-            $x++;
+        if($_POST['u'] == 'all'){
+            $data = $wpdb->get_results("SELECT * FROM $wpdb->users");
+            foreach($data as $user){
+               foreach($_POST['meta_key'] as $key){
+                update_user_meta($user->ID, $key, trim(stripslashes($_POST['meta_value'][$x])));
+                $x++;
+               }
+               $x = 0; 
+            }
+            foreach($_POST['meta_key'] as $key){
+                $umm_data[$key] = $_POST['meta_value'][$x];
+                $x++;
+            }
+            update_option('user_meta_manager_data', $umm_data);
+        } else {
+            foreach($_POST['meta_key'] as $key){
+                update_user_meta($_POST['u'], $key, trim(stripslashes($_POST['meta_value'][$x])));
+                $x++;
+            }
         }
-        $output = 'Meta data successfully updated.';
+        
+        $output = __('Meta data successfully updated.', 'user-meta-manager');
         break;
         
         case "delete":
@@ -169,14 +268,17 @@ function updateusermeta(){
             foreach($data as $user){
                 delete_user_meta($user->ID, $_POST['meta_key']);
             }
-            
-            unset($umm_data[$_POST['meta_key']]);
-            $umm_data = array_values($umm_data);
-            update_option('user_meta_manager_data', $umm_data);
+            $ud = array();
+            if(is_array($umm_data)){                
+                foreach($umm_data as $key => $value){
+                    if($key != $_POST['meta_key']) $ud[$key] = $value;
+                }                
+            }
+            update_option('user_meta_manager_data', $ud);
         } else {
             delete_user_meta($_POST['u'], $_POST['meta_key']);
         }
-        $output = 'Meta data successfully deleted.';
+        $output = __('Meta data successfully deleted.', 'user-meta-manager');
         break;
     }
     print $output;
@@ -205,7 +307,8 @@ class UMM_UI extends WP_List_Table {
             case 'ID':
             case 'user_login':
             case 'user_nicename':
-            case 'display_name':           
+            case 'display_name': 
+            case 'user_registered':           
             return $item->$column_name;
             default:
             return print_r($item,true);
@@ -214,9 +317,9 @@ class UMM_UI extends WP_List_Table {
     
     function column_user_login($item){
         $actions = array(
-            'edit_meta_data' => sprintf('<a href="admin-ajax.php?action=editusermeta&width=600&height=500&u=%s" title="Edit User Meta" class="thickbox">' . __('Edit Meta Data', $this->slug) . '</a>',$item->ID),
-            'add_user_meta' => sprintf('<a href="admin-ajax.php?action=addusermeta&width=600&height=500&u=%s" title="Add User Meta" class="thickbox">' . __('Add Meta Data', $this->slug) . '</a>',$item->ID),
-            'delete_user_meta' => sprintf('<a href="admin-ajax.php?action=deleteusermeta&width=600&height=500&u=%s" title="Delete User Meta" class="thickbox">' . __('Delete Meta Data', $this->slug) . '</a>',$item->ID)
+            'edit_meta_data' => sprintf('<a href="admin-ajax.php?action=editusermeta&width=600&height=500&u=%s" title="'.__('Edit User Meta', 'user-meta-manager').'" class="thickbox">' . __('Edit Meta Data', 'user-meta-manager') . '</a>',$item->ID),
+            'add_user_meta' => sprintf('<a href="admin-ajax.php?action=addusermeta&width=600&height=500&u=%s" title="'.__('Add User Meta', 'user-meta-manager').'" class="thickbox">' . __('Add Meta Data', 'user-meta-manager') . '</a>',$item->ID),
+            'delete_user_meta' => sprintf('<a href="admin-ajax.php?action=deleteusermeta&width=600&height=500&u=%s" title="'.__('Delete User Meta', 'user-meta-manager').'" class="thickbox">' . __('Delete Meta Data', 'user-meta-manager') . '</a>',$item->ID)
         );
         return sprintf('%1$s %2$s',
             $item->user_login,
@@ -227,9 +330,10 @@ class UMM_UI extends WP_List_Table {
     function get_columns(){
         $columns = array(
             'ID'    => __('ID', 'user-meta-manager'),
-            'user_login'     => __('User Login', $this->slug),            
-            'user_nicename'  => __('Nice Name', $this->slug),
-            'display_name' => __('Display Name', $this->slug)
+            'user_login'     => __('User Login', 'user-meta-manager'),            
+            'user_nicename'  => __('Nice Name', 'user-meta-manager'),
+            'display_name' => __('Display Name', 'user-meta-manager'),
+            'user_registered' => __('Date Registered', 'user-meta-manager')
         );
         return $columns;
     }
@@ -239,7 +343,8 @@ class UMM_UI extends WP_List_Table {
             'ID'    => array('ID',false),
             'user_login'     => array('user_login',false),
             'user_nicename'  => array('user_nicename',false),
-            'display_name' => array('display_name',false)
+            'display_name' => array('display_name',false),
+            'user_registered' => array('user_registered',false)
         );
         return $sortable_columns;
     }
@@ -253,7 +358,7 @@ class UMM_UI extends WP_List_Table {
         global $wp_rewrite, $wpdb;
         if('edit_meta_data' === $this->current_action()):
             $output = "<div id=\"umm-status\" class=\"updated\">
-            <input type=\"button\" class=\"umm-close-icon button-secondary\" title=\"Close\" value=\"x\" />"; 
+            <input type=\"button\" class=\"umm-close-icon button-secondary\" title=\"" . __('Close', 'user-meta-manager') . "\" value=\"x\" />"; 
             $output .= "</p></div>\n";
             define("UMM_STATUS", $output);       
         endif; // $this->current_action        
@@ -334,7 +439,7 @@ class UMM_UI extends WP_List_Table {
     
     #umm-form, #umm-list-table-form{
         position: relative;
-        margin: 0px 150px 0px 0px !important;
+        margin: 0px 0px 0px 0px !important;
     }
     
     #umm-form{
@@ -377,31 +482,42 @@ class UMM_UI extends WP_List_Table {
         margin: 10px 0px 10px 0px !important;
     }
     
+    .umm-slogan{
+        padding: 0px 0px 0px 46px;
+        margin: -5px 0px 0px 0px;
+        font-style: italic;
+    }
+    
+    .umm-top-links{
+        padding: 10px 0px 0px 0px;
+    }
+    
     -->
     </style>
     <div class="wrap">
       <div id="icon-users" class="icon32"><br/></div>
-        <h2><?php echo $this->title; ?></h2>
-        <?php _e('Manage User Meta Data', 'user-meta-manager') ?><br />
+        <h2><?php _e('User Meta Manager', 'user-meta-manager') ?></h2>
+        <div class="umm-slogan"><?php _e('Manage User Meta Data', 'user-meta-manager') ?></div>
         <div class="umm-info hidden"><br />
         <input type="button" class="umm-close-info-icon button-secondary" title="<?php _e('Close', 'user-meta-manager') ?>" value="x" />
-            <p><?php _e('What is <em>User Meta</em>? <em>User Meta</em> is user-specific data which is stored in the <em>wp_usermeta</em> database table. This data is stored by WordPress and various and sundry plugins, and can consist of anything from profile information to membership levels.', $this->slug) ?></p>
-            <p><?php _e('This plugin gives you the tools to manage the data which is stored for each user. Not only can you manage existing meta data, but you can also create new custom meta data for each user or for all users.', $this->slug) ?></p>
-            <p><?php _e('Follow the steps below to manage user meta data.', $this->slug) ?></p>
+            <p><?php _e('What is <em>User Meta</em>? <em>User Meta</em> is user-specific data which is stored in the <em>wp_usermeta</em> database table. This data is stored by WordPress and various and sundry plugins, and can consist of anything from profile information to membership levels.', 'user-meta-manager') ?></p>
+            <p><?php _e('This plugin gives you the tools to manage the data which is stored for each user. Not only can you manage existing meta data, but you can also create new custom meta data for each user or for all users.', 'user-meta-manager') ?></p>
+            <p><?php _e('Follow the steps below to manage user meta data.', 'user-meta-manager') ?></p>
             <ol start="1">
-       <li><?php _e('Always backup your data before making changes to your website.', $this->slug) ?></li>     
-	<li><?php _e('Locate from the list which User you want to work with and place your mouse on that item. Action links will appear as your mouse moves over each user.', $this->slug) ?>
+       <li><?php _e('Always backup your data before making changes to your website.', 'user-meta-manager') ?></li>     
+	<li><?php _e('Locate from the list which User you want to work with and place your mouse on that item. Action links will appear as your mouse moves over each user.', 'user-meta-manager') ?>
     <ol>
-    <li><?php _e('<strong>Edit Meta Data:</strong> Edit existing meta data for each member.', $this->slug) ?></li>
-    <li><?php _e('<strong>Add Meta Data:</strong> Add new, custom meta data for each user, or for <em>All Users</em>. If the meta data is added to <em>All Users</em>, new registrations will automatically receive the meta key and default value.', $this->slug) ?></li>
-    <li><?php _e('<strong>Delete Meta Data:</strong> Delete individual meta keys for a single user or for <em>All Users</em>. You can select which meta data to delete from the drop menu.', $this->slug) ?></li>
+    <li><?php _e('<strong>Edit Meta Data:</strong> Edit existing meta data for each member.', 'user-meta-manager') ?></li>
+    <li><?php _e('<strong>Add Meta Data:</strong> Add new, custom meta data for each user, or for <em>All Users</em>. If the meta data is added to <em>All Users</em>, new registrations will automatically receive the meta key and default value.', 'user-meta-manager') ?></li>
+    <li><?php _e('<strong>Delete Meta Data:</strong> Delete individual meta keys for a single user or for <em>All Users</em>. You can select which meta data to delete from the drop menu.', 'user-meta-manager') ?></li>
     </ol>
     </li>
-    <li><?php _e('<strong>Shorttags:</strong><br /><br /><strong>Display data for a particular user:</strong> <br /><code>[usermeta key="meta key" user="user id"]</code> <br /><br /><strong>Display data for the current user:</strong> <br /><code>[usermeta key="meta key"]</code> <br /><br /><strong>Restrict access based on meta key and value:</strong> <br /><code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> <br />Allowed users will have a matching meta value. <br /><br /><strong>Restrict access based on user ID:</strong> <br /><code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> <br />Allowed user IDs are listed in the <em>users</em> attribute.', $this->slug) ?></li>
-    <li>Premium Tech Support - $25.00/hr <form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="RZ8KMAZYEDURL"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>
+    <li><?php _e('<strong>Shorttags:</strong><p>Shorttags can be inserted into Posts or Pages to display user meta data or control access to content.</p><strong>Display data for a particular user:</strong> <br /><code>[usermeta key="meta key" user="user id"]</code> <br /><br /><strong>Display data for the current user:</strong> <br /><code>[usermeta key="meta key"]</code> <br /><br /><strong>Restrict access based on meta key and value:</strong> <br /><code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> <br />Allowed users will have a matching meta value. <br /><br /><strong>Restrict access based on user ID:</strong> <br /><code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> <br />Allowed user IDs are listed in the <em>users</em> attribute.', 'user-meta-manager') ?></li>
+    <li><?php _e('Premium Tech Support', 'user-meta-manager') ?> - $25.00/hr <form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="RZ8KMAZYEDURL"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>
 </ol>
 <br /> 
         </div>
+        <div class="umm-top-links"><span class="edit_custom_meta_data"><a href="admin-ajax.php?action=editcustommeta&amp;width=600&amp;height=500&amp;u=1" title="Edit Custom Meta" class="thickbox">Edit Custom Meta Data</a> | </span><span class="add_custom_meta"><a href="admin-ajax.php?action=addcustommeta&amp;width=600&amp;height=500&amp;u=1" title="Add Custom Meta" class="thickbox">Add Custom Meta Data</a> | </span><span class="delete_custom_meta"><a href="admin-ajax.php?action=deletecustommeta&amp;width=600&amp;height=500&amp;u=1" title="Delete Custom Meta" class="thickbox">Delete Custom Meta Data</a></span></div>
         <?php
         if(defined("UMM_STATUS")) echo UMM_STATUS;
         ?>
@@ -418,7 +534,7 @@ class UMM_UI extends WP_List_Table {
             <?php $this->display() ?>
         </form>
 
-<code><?php _e('Another <em><strong>Quality</strong></em> Work From', $this->slug) ?>  <a href="http://JasonLau.biz" target="_blank">JasonLau.biz</a> - &copy;Jason Lau</code> <code>[<?php _e($this->title . ' Version', $this->slug) ?>: <?php echo UMM_VERSION; ?>]</code>
+<code><?php _e('Another <em><strong>Quality</strong></em> Work From', 'user-meta-manager') ?>  <a href="http://JasonLau.biz" target="_blank">JasonLau.biz</a> - &copy;Jason Lau</code> <code>[<?php _e($this->title . ' Version', 'user-meta-manager') ?>: <?php echo UMM_VERSION; ?>]</code>
 
 </div>
 
@@ -469,12 +585,12 @@ class UMM_UI extends WP_List_Table {
         try{
             $("#umm-list-table-form input[type='checkbox']").prop('checked');
             }catch(e){
-                alert('<?php _e('Error: User Meta Manager is not compatible with old versions of jQuery. Please update jQuery to the latest version from jquery.com. jquery.js is located in wp-includes/js/jquery/', $this->slug) ?>');
+                alert('<?php _e('Error: User Meta Manager is not compatible with old versions of jQuery. Please update jQuery to the latest version from jquery.com. jquery.js is located in wp-includes/js/jquery/', 'user-meta-manager') ?>');
         }
         
-        $("div.actions").first().prepend('<strong><?php _e('Items Per Page', $this->slug) ?>:</strong> <input type="text" id="per-page" size="4" value="<?php echo $per_page ?>" /><input class="umm-go button-secondary action" type="submit" value="<?php _e('Go', $this->slug) ?>" />').append('<input class="umm-help button-secondary hidden" type="button" value="?" title="Info" />');
+        $("div.actions").first().prepend('<strong><?php _e('Items Per Page', 'user-meta-manager') ?>:</strong> <input type="text" id="per-page" size="4" value="<?php echo $per_page ?>" /><input class="umm-go button-secondary action" type="submit" value="<?php _e('Go', 'user-meta-manager') ?>" />').append('<input class="umm-help button-secondary hidden" type="button" value="?" title="Info" />');
         
-        $("#get-search-input").after(' <select class="um-search-mode" name="umm_search_mode"><option value="ID"<?php if(!$_REQUEST['umm_search_mode'] || $_REQUEST['umm_search_mode'] == 'ID'): ?> selected="selected"<?php endif; ?>>ID</option><option value="user_login"<?php if($_REQUEST['umm_search_mode'] == 'user_login'): ?> selected="selected"<?php endif; ?>>User Login</option><option value="user_nicename"<?php if($_REQUEST['umm_search_mode'] == 'user_nicename'): ?> selected="selected"<?php endif; ?>>Nice Name</option><option value="display_name"<?php if($_REQUEST['umm_search_mode'] == 'display_name'): ?> selected="selected"<?php endif; ?>>Display Name</option></select>');
+        $("#get-search-input").after(' <select class="um-search-mode" name="umm_search_mode"><option value="ID"<?php if(!$_REQUEST['umm_search_mode'] || $_REQUEST['umm_search_mode'] == 'ID'): ?> selected="selected"<?php endif; ?>><?php _e('ID', 'user-meta-manager') ?></option><option value="user_login"<?php if($_REQUEST['umm_search_mode'] == 'user_login'): ?> selected="selected"<?php endif; ?>><?php _e('User Login', 'user-meta-manager') ?></option><option value="user_nicename"<?php if($_REQUEST['umm_search_mode'] == 'user_nicename'): ?> selected="selected"<?php endif; ?>><?php _e('Nice Name', 'user-meta-manager') ?></option><option value="display_name"<?php if($_REQUEST['umm_search_mode'] == 'display_name'): ?> selected="selected"<?php endif; ?>><?php _e('Display Name', 'user-meta-manager') ?></option><option value="user_registered"<?php if($_REQUEST['umm_search_mode'] == 'user_registered'): ?> selected="selected"<?php endif; ?>><?php _e('Date Registered', 'user-meta-manager') ?></option></select>');
         
        $('.umm-help').css('border-color','#FFFF00');
        $(".umm-mode").each(function(){
@@ -520,14 +636,14 @@ class UMM_UI extends WP_List_Table {
     
     $("div.actions:last").css({
         'margin': '0px 0px 0px 0px !important'
-    });
+    });     
     
     $("#updateusermeta_submit").live('click', function(event){
         event.preventDefault();
         var obj = $(this),
         original_value = $(this).val(),
         return_page = $("#updateusermeta_form input[name='return_page']").val();
-        obj.prop('disabled',true).val('Wait... ');
+        obj.prop('disabled',true).val('<?php _e('Wait...', 'user-meta-manager') ?> ');
         $.post('admin-ajax.php?action=updateusermeta&width=600&height=500', $("#updateusermeta_form").serialize(), function(data){
             $("#TB_ajaxContent").load(return_page, function(){
                 new Effect.Highlight("TB_ajaxContent", { startcolor: '#ffff99',
@@ -547,7 +663,7 @@ endcolor: '#ffffff' });
 
 function umm_ui(){
     if(!current_user_can('edit_users')):
-    echo "You do not have the appropriate permission to view this content.";
+    _e("You do not have the appropriate permission to view this content.", "user-meta-manager");
     else:
     $_UMM_UI = new UMM_UI();
     $_UMM_UI->display_module();
@@ -591,7 +707,7 @@ function umm_useraccess_shorttag($atts, $content) {
         if($message){
             $content = $message;
         } else {
-            $content = "You do not have sufficient permissions to access this content.";
+            $content = __('You do not have sufficient permissions to access this content.', 'user-meta-manager');
         }
     }
     
@@ -618,7 +734,7 @@ function umm_install(){
 register_deactivation_hook(__FILE__, 'umm_deactivate');
 function umm_deactivate(){
     // Preserve data
-    // delete_option('user_meta_manager_data');
+     delete_option('user_meta_manager_data');
 }
 
 ?>
