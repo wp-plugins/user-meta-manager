@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, shorttag, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz
 Requires at least: 3.3.1 
-Stable tag: 1.2
+Stable tag: 1.3
 Tested up to: 3.3.2
 
 == Description ==
@@ -18,6 +18,7 @@ Tested up to: 3.3.2
 Allowed users will have a matching meta value.</p>
 <p><strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
 Allowed user IDs are listed in the users attribute.</p>
+<p>If you find this plugin useful, please rate it up. If for some reason you think this plugin is broken or has a bug, don't be a jerk and rate it down, but instead, be helpful and contact me at http://jasonlau.biz/home/contact-me.</p>
 
 == Installation ==
 
@@ -52,6 +53,9 @@ Numerous updates and some improvements.
 
 = 1.2 =
 Enabled multilingual support.
+
+= 1.3 =
+Fixed a typo.
 
 == Upgrade Notice ==
 
