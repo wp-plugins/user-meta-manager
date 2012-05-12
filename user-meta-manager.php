@@ -31,7 +31,7 @@
 }
 
 define('UMM', null);
-define('UMM_VERSION', '1.2');
+define('UMM_VERSION', '1.3');
 define("UMM_PATH", ABSPATH . 'wp-content/plugins/user-meta-manager/');
 
 if(!class_exists('WP_List_Table')):
