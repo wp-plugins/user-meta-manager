@@ -18,7 +18,7 @@ Tested up to: 3.3.2
 Allowed users will have a matching meta value.</p>
 <p><strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
 Allowed user IDs are listed in the users attribute.</p>
-<p>If you find this plugin useful, please rate it up. If for some reason you think this plugin is broken or has a bug, don't be a jerk and rate it down, but instead, be helpful and contact me at http://jasonlau.biz/home/contact-me.</p>
+<p>If you find this plugin useful, please rate it up. If for some reason you think this plugin is broken or has a bug, be helpful and contact me at http://jasonlau.biz/home/contact-me.</p>
 
 == Installation ==
 
@@ -55,7 +55,7 @@ Numerous updates and some improvements.
 Enabled multilingual support.
 
 = 1.3 =
-Fixed a typo.
+Critical update.
 
 == Upgrade Notice ==
 
@@ -67,3 +67,6 @@ Numerous updates and some improvements.
 
 = 1.2 =
 Enabled multilingual support.
+
+= 1.3 =
+Critical update.

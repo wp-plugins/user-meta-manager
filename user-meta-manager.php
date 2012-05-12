@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: User Meta Manager allows administrators to add, edit, or delete user meta data. User   Meta Manager also provides a shorttag for inserting user meta data into posts or pages. <strong>To display data for a particular user:</strong> <code>[usermeta key="meta key" user="user id"]</code> <strong>To display data for the current user:</strong> <code>[usermeta key="meta key"]</code> An additional shorttag is available for restricting user access based on a meta key and value or user ID. <strong>To restrict access based on meta key and value:</strong> <code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed users will have a matching meta value. <strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed user IDs are listed in the users attribute.
- * Version: 1.2
+ * Version: 1.3
  * Author: Jason Lau
  * Author URI: http://websitedev.biz
  * Disclaimer: Use at your own risk. No warranty expressed or implied.
@@ -68,7 +68,9 @@ function editusermeta(){
   </thead>
     ';
     foreach($data as $d){
-        $output .= "<tr><td>".$d->meta_key ."</td><td><input name=\"meta_key[]\" type=\"hidden\" value=\"". $d->meta_key ."\" /><input name=\"meta_value[]\" type=\"text\" value='". $d->meta_value ."' size=\"40\" /> </td></tr>";
+        if(!is_array(unserialize($d->meta_value))){
+           $output .= "<tr><td>".$d->meta_key ."</td><td><input name=\"meta_key[]\" type=\"hidden\" value=\"". $d->meta_key ."\" /><input name=\"meta_value[]\" type=\"text\" value='". $d->meta_value ."' size=\"40\" /></td></tr>"; 
+        }          
     }
     $output .= '</table>
     <div class="updateusermeta-result hidden"></div>
