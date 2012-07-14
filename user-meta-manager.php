@@ -60,7 +60,7 @@
 
 
 
-define('UMM_VERSION', '1.5');
+define('UMM_VERSION', '1.5.1');
 
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 
