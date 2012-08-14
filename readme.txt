@@ -11,14 +11,14 @@ Tested up to: 3.4.1
 
 <p>User Meta Manager allows administrators to add, edit, or delete user meta data.</p> 
 <p>User Meta Manager also provides a shorttag for inserting user meta data into posts or pages.</p>
-<p><strong>To display data for a particular user:</strong> <code>[usermeta key="meta key" user="user id"]</code></p>
-<p><strong>To display data for the current user:</strong> <code>[usermeta key="meta key"]</code></p>
+<p><strong>To display data for a particular user:</strong><br /><pre>[usermeta key="meta key" user="user id"]</pre></p>
+<p><strong>To display data for the current user:</strong><br /><pre>[usermeta key="meta key"]</pre></p>
 <p>An additional shorttag is available for restricting user access based on a meta key and value or user ID.</p>
-<p><strong>To restrict access based on meta key and value:</strong> <code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
+<p><strong>To restrict access based on meta key and value:</strong><br /><pre>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</pre>
 Allowed users will have a matching meta value.</p>
-<p><strong>To restrict access based on multiple meta keys and values:</strong> <code>[useraccess json='{"access_level":"gold","sub_level":"silver"}' message="You do not have permission to view this content."]Restricted content goes here.[/useraccess]</code>
+<p><strong>To restrict access based on multiple meta keys and values:</strong><br /><pre>[useraccess json='{"access_level":"gold","sub_level":"silver"}' message="You do not have permission to view this content."]Restricted content goes here.[/useraccess]</pre>
 The <em>json</em> attribute is used to define a list of meta keys and values. The list must be JSON encoded, as seen in the example above. Users with matching meta keys and values will be granted access to restricted content.</p>
-<p><strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
+<p><strong>To restrict access based on user ID:</strong><br /><pre>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</pre>
 Allowed user IDs are listed in the users attribute.</p>
 <p>If you find this plugin useful, please rate it up. If for some reason you think this plugin is broken or has a bug, be helpful and contact me at http://jasonlau.biz/home/contact-me.</p>
 
