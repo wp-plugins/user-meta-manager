@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 1.5.3
+ * Version: 1.5.4
  * Author: Jason Lau
  * Author URI: http://websitedev.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '1.5.3');
+define('UMM_VERSION', '1.5.4');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 
 if(!class_exists('WP_List_Table')):
@@ -485,12 +485,13 @@ function umm_useraccess_shorttag($atts, $content) {
     $message = $atts['message'];
     
     if($atts['json']):
+    $access = false;
       $json = json_decode($atts['json']);
       foreach($json as $k => $v):
         if($k && $v):
           $meta_value = get_user_meta($current_user->ID, $k, true);
-          if($meta_value != trim($v)):        
-            $access = false;
+          if($meta_value == trim($v)):        
+            $access = true;
           endif;  
         endif;
     endforeach; 
