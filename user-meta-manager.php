@@ -3,8 +3,8 @@
 /**
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
- * Description: User Meta Manager allows administrators to add, edit, or delete user meta data. User   Meta Manager also provides a shorttag for inserting user meta data into posts or pages. <strong>To display data for a particular user:</strong> <code>[usermeta key="meta key" user="user id"]</code> <strong>To display data for the current user:</strong> <code>[usermeta key="meta key"]</code> An additional shorttag is available for restricting user access based on a meta key and value or user ID. <strong>To restrict access based on meta key and value:</strong> <code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed users will have a matching meta value. <strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code> Allowed user IDs are listed in the users attribute.
- * Version: 1.5.2
+ * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
+ * Version: 1.5.3
  * Author: Jason Lau
  * Author URI: http://websitedev.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '1.5.2');
+define('UMM_VERSION', '1.5.3');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 
 if(!class_exists('WP_List_Table')):
@@ -483,13 +483,24 @@ function umm_useraccess_shorttag($atts, $content) {
     $value = $atts['value'];
     $users = ($atts['users']) ? explode(" ", $atts['users']) : false;
     $message = $atts['message'];
-
-    if($key && $value):
-      $v = get_user_meta($current_user->ID, $key, true);
-      if($v != trim($value)):        
+    
+    if($atts['json']):
+      $json = json_decode($atts['json']);
+      foreach($json as $k => $v):
+        if($k && $v):
+          $meta_value = get_user_meta($current_user->ID, $k, true);
+          if($meta_value != trim($v)):        
+            $access = false;
+          endif;  
+        endif;
+    endforeach; 
+    elseif($key && $value):
+        $meta_value = get_user_meta($current_user->ID, $key, true);
+      if($meta_value != trim($value)):        
           $access = false;
-      endif;  
+      endif;
     endif;
+    
 
     if($users):
         if(!in_array($current_user->ID, $users)):

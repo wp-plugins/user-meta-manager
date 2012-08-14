@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, shorttag, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz
 Requires at least: 3.3.1 
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Tested up to: 3.4.1
 
 == Description ==
@@ -16,6 +16,8 @@ Tested up to: 3.4.1
 <p>An additional shorttag is available for restricting user access based on a meta key and value or user ID.</p>
 <p><strong>To restrict access based on meta key and value:</strong> <code>[useraccess key="meta key" value="meta value" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
 Allowed users will have a matching meta value.</p>
+<p><strong>To restrict access based on multiple meta keys and values:</strong> <code>[useraccess json='{"access_level":"gold","sub_level":"silver"}' message="You do not have permission to view this content."]Restricted content goes here.[/useraccess]</code>
+The <em>json</em> attribute is used to define a list of meta keys and values. The list must be JSON encoded, as seen in the example above. Users with matching meta keys and values will be granted access to restricted content.</p>
 <p><strong>To restrict access based on user ID:</strong> <code>[useraccess users="1 22 301" message="You do not have permission to view this content."]Restricted content.[/useraccess]</code>
 Allowed user IDs are listed in the users attribute.</p>
 <p>If you find this plugin useful, please rate it up. If for some reason you think this plugin is broken or has a bug, be helpful and contact me at http://jasonlau.biz/home/contact-me.</p>
@@ -72,6 +74,9 @@ Minor change.
 = 1.5.2 =
 Minor code changes.
 
+= 1.5.3 =
+Added a new shorttag attribute, which allows you to restrict content based upon multiple meta keys and values.
+
 == Upgrade Notice ==
 
 = 1.0 =
@@ -100,3 +105,6 @@ Minor change.
 
 = 1.5.2 =
 Minor code changes.
+
+= 1.5.3 =
+Added a new shorttag attribute, which allows you to restrict content based upon multiple meta keys and values.
