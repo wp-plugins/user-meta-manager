@@ -87,18 +87,28 @@ jQuery.cookie = function(name, value, options) {
         'margin': '0px 0px 0px 0px !important'
     });
 
-    $("#updateusermeta_submit").live('click', function(event){
+    $("#umm_update_user_meta_submit").live('click', function(event){
         event.preventDefault();
         var obj = $(this),
         d = obj.data(),
         original_value = $(this).val(),
-        return_page = $("#updateusermeta_form input[name='return_page']").val();
+        return_page = $("#" + d.form + " input[name='return_page']").val();
         obj.prop('disabled',true).val(d.wait);
-        $.post('admin-ajax.php?action=updateusermeta&width=600&height=500', $("#updateusermeta_form").serialize(), function(data){
+        $.post('admin-ajax.php?action=' + d.action + '&width=600&height=500', $("#" + d.form).serialize(), function(data){
+            $("div.umm-result-container").load(location.href + " div#umm-left-panel", function(){
+                
+                $("table.wp-list-table:first").replaceWith($("div.umm-result-container table.wp-list-table"));
+                $("div#umm-search select.um-search-mode").replaceWith($("div.umm-result-container select.um-search-mode"));
+                $("div.umm-result-container").html('');
+            });
             $("#TB_ajaxContent").load(return_page, function(){
-                new Effect.Highlight("TB_ajaxContent", { startcolor: '#ffff99', endcolor: '#ffffff' });
-            $('.updateusermeta-result').html(data).show('slow').delay(5000).hide('slow');
+                // new Effect.Highlight("TB_ajaxContent", { startcolor: '#ffff99', endcolor: '#ffffff' });
+            $('#' + d.form + ' div.umm_update_user_meta-result').html(data).show('slow').delay(5000).hide('slow');
             });
         });
+    });
+    
+    $(".umm-remove-row").live('click', function(event){
+        $(this).closest("tr").remove();
     });
     }); // jQuery

@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, shorttag, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz
 Requires at least: 3.3.1 
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 Tested up to: 3.4.1
 
 == Description ==
@@ -80,6 +80,9 @@ Added a new shorttag attribute, which allows you to restrict content based upon 
 = 1.5.4 =
 Made a slight change to the new json shorttag attribute.
 
+= 1.5.5 =
+This update adds features which allow you to edit which columns are displayed in the results table. Look for the new Edit Columns link. 
+
 == Upgrade Notice ==
 
 = 1.0 =
@@ -114,3 +117,6 @@ Added a new shorttag attribute, which allows you to restrict content based upon 
 
 = 1.5.4 =
 Made a slight change to the new json shorttag attribute.
+
+= 1.5.5 =
+This update adds features which allow you to edit which columns are displayed in the results table. Look for the new Edit Columns link. 
