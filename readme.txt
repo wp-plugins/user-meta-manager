@@ -4,8 +4,8 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, shorttag, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz
 Requires at least: 3.3.1 
-Stable tag: 1.5.6
-Tested up to: 3.4.1
+Stable tag: 1.5.7
+Tested up to: 3.4.2
 
 == Description ==
 
@@ -84,7 +84,10 @@ Made a slight change to the new json shorttag attribute.
 This update adds features which allow you to edit which columns are displayed in the results table. Look for the new Edit Columns link.
 
 = 1.5.6 =
-Fixed a bug which caused meta values containing apostrophes to not display correctly in the editor. 
+Fixed a bug which caused meta values containing apostrophes to not display correctly in the editor.
+
+= 1.5.7 =
+Fixed a bug which caused meta values to not display correctly in the editor. 
 
 == Upgrade Notice ==
 
@@ -126,3 +129,6 @@ This update adds features which allow you to edit which columns are displayed in
 
 = 1.5.6 =
 Fixed a bug which caused meta values containing apostrophes to not display correctly in the editor.
+
+= 1.5.7 =
+Fixed a bug which caused meta values to not display correctly in the editor.

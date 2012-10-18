@@ -1,3 +1,30 @@
+/**
+ * Plugin Name: User Meta Manager
+ * Plugin URI: http://websitedev.biz
+ * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
+ * Version: 1.5.7
+ * Author: Jason Lau
+ * Author URI: http://websitedev.biz
+ * Text Domain: user-meta-manager
+ * Disclaimer: Use at your own risk. No warranty expressed or implied.
+ * 
+ * Always backup your database before making changes.
+ * 
+ * Copyright 2012 http://websitedev.biz http://jasonlau.biz
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
+ * See the GNU General Public License for more details.
+ * http://www.gnu.org/licenses/gpl.html
+ */
+ 
 jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') {
         options = options || {};
