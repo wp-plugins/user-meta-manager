@@ -84,7 +84,10 @@ Fixed a bug which caused meta values to not display correctly in the editor.
  This is a near complete overhaul with too many changes to list. 
  
  = 2.0.1 =
- Fixed a potential bug in the activation process.
+ Fixed a potential bug in the activation process. 
+ 
+ = 2.0.2 =
+ Changes to the backup and restore process.
 
 == Upgrade Notice ==
 
@@ -134,4 +137,7 @@ Fixed a bug which caused meta values to not display correctly in the editor.
  This is a near complete overhaul with too many changes to list. 
  
  = 2.0.1 =
- Fixed a potential bug in the activation process.
+ Fixed a potential bug in the activation process. 
+ 
+  = 2.0.2 =
+ Changes to the backup and restore process.
