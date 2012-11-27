@@ -178,8 +178,6 @@ if(isset($_REQUEST[\'umm_confirm_restore\'])):
     
     if($print):
       print '<div class="umm-backup-page-container">' . $back_button . $output . '</div>';
-      exit;
-    else:
       exit;  
     endif;      
 }
