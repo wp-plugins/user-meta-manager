@@ -118,7 +118,8 @@ function umm_backup($backup_mode=false, $tofile=false, $print=true){
         break;
         
         case "php":
-        $data = get_option('umm_backup');
+        $backup_data = get_option('umm_backup');
+        $data = (empty($backup_data) || !is_array($backup_data)) ? array() : $backup_data;
         $budate = get_option('umm_backup_date');
         $output = '<?php
 ';
@@ -525,9 +526,10 @@ function umm_get_columns(){
     return array_merge($users_columns, $usermeta_columns);
 }
 
-function umm_install(){    
-   add_option('umm_backup', umm_usermeta_data());
-   add_option('umm_backup_date', date("M d, Y") . ' ' . date("g:i A"));
+function umm_install(){ 
+   $bu_data = umm_usermeta_data();   
+   update_option('umm_backup', $bu_data);
+   update_option('umm_backup_date', date("M d, Y") . ' ' . date("g:i A"));
    $umm_data = get_option('user_meta_manager_data');
    if(!empty($umm_data) && !is_array($umm_data)):
    // Backwards compatibility
@@ -1279,10 +1281,15 @@ function umm_useraccess_shortcode($atts, $content) {
     return $content;         
 }
 
-function umm_usermeta_data($criteria="ORDER BY umeta_id ASC"){
+function umm_usermeta_data($criteria=null){
     global $wpdb;
-    $data = $wpdb->get_results("SELECT * FROM $wpdb->usermeta " . $criteria);
-    return $data;
+    $criteria = (empty($criteria)) ? " ORDER BY umeta_id ASC" : " " . $criteria;
+    if($data = $wpdb->get_results("SELECT * FROM " . $wpdb->usermeta . $criteria)):
+      return $data;
+    else:
+      return false;
+    endif;
+    exit;    
 }
 
 function umm_usermeta_keys_menu($select=true,$optgroup=false,$include_used=false){
