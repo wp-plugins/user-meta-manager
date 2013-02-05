@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, short code, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz, profile, field, fields, extra
 Requires at least: 3.3.1 
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 Tested up to: 3.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,9 @@ Yes I do. Check my website at JasonLau.biz.
 1. screenshot-1.png The User Meta Manager Home screen.
 
 == Changelog ==
+
+= 2.1.2 =
+Fixed a javascript bug and a css bug.
 
 = 2.1.1 =
 Fixed a javascript bug.
@@ -207,3 +210,6 @@ Now you can sort the custom fields by dragging and dropping them in position in 
 
 = 2.1.1 =
 Fixed a javascript bug.
+
+= 2.1.2 =
+Fixed a javascript bug and a css bug.
