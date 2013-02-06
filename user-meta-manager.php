@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 2.1.3
+ * Version: 2.1.4
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '2.1.3');
+define('UMM_VERSION', '2.1.4');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;sub_action=");
@@ -444,7 +444,7 @@ function umm_edit_custom_meta(){
     $edit_key = (!isset($_REQUEST['umm_edit_key']) || empty($_REQUEST['umm_edit_key'])) ? '' : $_REQUEST['umm_edit_key'];
     if($edit_key == ""):
         $output = umm_fyi('<p>'.__('Select from the list a meta key to edit, or drag and drop to sort.', UMM_SLUG).'</p>');
-        $output .= '<form id="umm_update_user_meta_form" method="post">
+        $output .= '<form id="umm_update_user_meta_form" method="post" data-error_message="' . __('Select a meta key to edit.', UMM_SLUG). '">
         <table id="umm_edit_key">
         <tr class="alternate"><td colspan="2"><strong>'.__('Edit Key', UMM_SLUG).'</strong></td></tr>
         ';
