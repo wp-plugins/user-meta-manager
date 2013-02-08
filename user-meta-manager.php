@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 2.1.7
+ * Version: 2.1.8
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '2.1.7');
+define('UMM_VERSION', '2.1.8');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -388,7 +388,7 @@ function umm_delete_user_meta(){
     <input id="umm_delete_user_meta_submit" data-form="umm_update_user_meta_form" data-subpage="umm_update_user_meta" data-wait="'.__('Wait...', UMM_SLUG).'" class="button-primary button-delete" type="submit" value="'.__('Yes', UMM_SLUG).'" /> ';
     $output .= umm_button("umm_delete_user_meta&u=" . $user_id, __('Cancel', UMM_SLUG));
     $output .= '<input name="umm_edit_key" type="hidden" value="' . $delete_key . '" /><input name="all_users" type="hidden" value="' . $all_users . '" />
-    <input name="all_users" type="hidden" value="true" /><input name="mode" type="hidden" value="delete" /><input name="u" type="hidden" value="' . $user_id . '" /><input name="return_page" type="hidden" value="' . UMM_AJAX . 'umm_delete_user_meta&u=' . $user_id . '" /><input name="sub_mode" type="hidden" value="confirm" /></p>
+    <input name="mode" type="hidden" value="delete" /><input name="u" type="hidden" value="' . $user_id . '" /><input name="return_page" type="hidden" value="' . UMM_AJAX . 'umm_delete_user_meta&u=' . $user_id . '" /><input name="sub_mode" type="hidden" value="confirm" /></p>
     </form>';
     endif;
     print $output;
@@ -1184,6 +1184,23 @@ function umm_subpage_title($user_id, $text){
 function umm_switch_action(){
     if(function_exists($_REQUEST['umm_sub_action']))
        call_user_func($_REQUEST['umm_sub_action']);
+}
+
+function umm_sync_user_meta(){
+    global $wpdb;
+    $umm_data = get_option('user_meta_manager_data');
+    $data = $wpdb->get_results("SELECT * FROM " . $wpdb->users);
+    foreach($umm_data as $meta_key => $settings):
+       foreach($data as $user):
+          $test = get_user_meta($user->ID, $meta_key);
+          if(!$test):
+             update_user_meta($user->ID, $meta_key, $settings['value'], false);
+          endif;
+       endforeach;
+    endforeach;
+    $output = __('Meta data successfully set for all users.', UMM_SLUG);
+    print $output;
+    exit;
 }
 
 function umm_ui(){
