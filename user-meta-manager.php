@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 2.1.8
+ * Version: 2.1.9
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '2.1.8');
+define('UMM_VERSION', '2.1.9');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -586,6 +586,7 @@ function umm_get_columns(){
 
 function umm_get_profile_fields($output_type='array'){
     $profile_fields = get_option('umm_profile_fields');
+    if(empty($profile_fields) || !is_array($profile_fields)) $profile_fields = array();
     $sort_order = get_option('umm_sort_order');
     if(empty($sort_order) || !is_array($sort_order)) $sort_order = false;
     if($sort_order):
@@ -601,7 +602,7 @@ function umm_get_profile_fields($output_type='array'){
         case "select":
          $output = '<select class="umm-profile-fields-select" name="umm_edit_key">' . "\n";
          $output .= '<option value="" selected="selected">' . __('Select A Key', UMM_SLUG) . '</option>' . "\n";
-         foreach($profile_fields  as $key => $settings):
+         foreach($profile_fields as $key => $settings):
             $output .= '<option value="' . $key . '">' . $key . '</option>' . "\n";
          endforeach;
          $output .= '</select>' . "\n";
@@ -618,8 +619,25 @@ function umm_get_profile_fields($output_type='array'){
         default: 
         // Return array
         return $profile_fields;
-    }
-    
+    }   
+}
+
+function umm_get_users(){
+    global $wpdb, $current_site;
+    $query = "SELECT * FROM $wpdb->users";       
+    $data = $wpdb->get_results($query);   
+    if(defined('MULTISITE') && MULTISITE):
+       $user_data = array();
+       foreach($data as $d):
+          $user_blogs = get_blogs_of_user($d->ID);
+          $blog_id = get_current_blog_id();
+          if(array_key_exists($blog_id, $user_blogs)):
+             array_push($user_data, $d);
+          endif;
+       endforeach;
+       $data = $user_data;   
+    endif;
+    return $data;
 }
 
 function umm_install(){
@@ -1365,7 +1383,7 @@ function umm_update_user_meta(){
            switch($u){
             case "all":
                // Insert new key for all users and add new profile field if needed
-               $data = $wpdb->get_results("SELECT * FROM " . $wpdb->users);
+               $data = umm_get_users();
                foreach($data as $user):
                   update_user_meta($user->ID, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
                endforeach;
@@ -1403,7 +1421,7 @@ function umm_update_user_meta(){
                // Update custom meta
                if($all_users):
                   // Update value for all users
-                  $data = $wpdb->get_results("SELECT * FROM " . $wpdb->users);
+                  $data = umm_get_users();
                   foreach($data as $user):
                      update_user_meta($user->ID, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
                   endforeach;
@@ -1444,7 +1462,7 @@ function umm_update_user_meta(){
         $meta_key = $_POST['umm_edit_key'];
         $saved_profile_fields = get_option('umm_profile_fields');
         if($all_users):
-            $data = $wpdb->get_results("SELECT * FROM $wpdb->users");
+            $data = umm_get_users();
             foreach($data as $user):
                 delete_user_meta($user->ID, $meta_key);
             endforeach;

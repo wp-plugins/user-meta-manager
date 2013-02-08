@@ -4,7 +4,7 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, short code, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz, profile, field, fields, extra
 Requires at least: 3.3.1 
-Stable tag: 2.1.8
+Stable tag: 2.1.9
 Tested up to: 3.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -51,6 +51,9 @@ Yes I do. Check my website at JasonLau.biz.
 1. screenshot-1.png The User Meta Manager Home screen.
 
 == Changelog ==
+
+= 2.1.9 =
+New feature: Added multisite support. Now User Meta Manager manages data only for the users of the current site.
 
 = 2.1.8 =
 New feature: Added a button to the plugin settings section which allows you to sync custom meta data to all users. Also fixed two bugs in the meta data deletion process.
@@ -251,3 +254,6 @@ New feature: Added a form short code builder to the contextual help section.
 
 = 2.1.8 =
 New feature: Added a button to the plugin settings section which allows you to sync custom meta data to all users. Also fixed two bugs in the meta data deletion process.
+
+= 2.1.9 =
+New feature: Added multisite support. Now User Meta Manager manages data only for the users of the current site.
