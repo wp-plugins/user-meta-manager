@@ -52,6 +52,9 @@ Yes I do. Check my website at JasonLau.biz.
 
 == Changelog ==
 
+= 2.1.9 =
+New feature: Added a CSV builder to the Backup section.
+
 = 2.2.0 =
 Improved multisite support.
 
@@ -263,3 +266,6 @@ New feature: Added multisite support. Now User Meta Manager manages data only fo
 
 = 2.2.0 =
 Improved multisite support.
+
+= 2.1.9 =
+New feature: Added a CSV builder to the Backup section.
