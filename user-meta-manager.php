@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: http://websitedev.biz
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 2.2.9
+ * Version: 3.0.0
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '2.2.9');
+define('UMM_VERSION', '3.0.0');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -822,7 +822,7 @@ function umm_install(){
    
    */   
     
-   if(version_compare($umm_data['settings']['version'], '2.2.9', '<')){
+   if((version_compare($umm_data['settings']['version'], '2.2.9', '<') && !isset($umm_data['settings']['html_during_profile'])) || empty($umm_data['settings']['html_during_adduser']) || empty($umm_data['settings']['html_during_register']) || empty($umm_data['settings']['html_during_shortcode']) || empty($umm_data['settings']['html_during_profile'])){
        // v2.2.9 adds html syntax options
        $umm_data['settings']['html_before_adduser'] = $default_html_before;
        $umm_data['settings']['html_during_adduser'] = $default_html_during;
@@ -843,7 +843,7 @@ function umm_install(){
    End Upgrades 
    
    */
-   
+   $umm_data['settings']['version'] = UMM_VERSION;
    update_option('user_meta_manager_data', $umm_data);
    umm_backup('php', 'yes', false);
 }
