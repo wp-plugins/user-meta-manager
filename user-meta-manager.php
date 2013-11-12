@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: https://github.com/jasonlau/Wordpress-User-Meta-Manager
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages.
- * Version: 3.0.8
+ * Version: 3.0.9
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '3.0.8');
+define('UMM_VERSION', '3.0.9');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -59,16 +59,16 @@ function umm_add_custom_meta(){
 }
 
 function umm_add_registration_fields(){
-    $content = umm_show_profile_fields(false, false, 'register');
+    $content = umm_show_profile_fields(false, false, 'register', 'registerform');
     echo $content;
 }
 
 function umm_add_user_fields(){
-    $umm_content = umm_show_profile_fields(false, false, 'adduser');
+    $umm_content = umm_show_profile_fields(false, false, 'adduser', 'createuser');
     $umm_output = '<div id="umm-add-user-fields" style="display:none;">' . $umm_content . '</div>
     <script type="text/javascript">
        jQuery(function($){
-	      $("form#createuser p.submit").before($("div#umm-add-user-fields").html());
+	      $("form#createuser p.submit").before(\'<input type="hidden" name="umm_form" value="createuser" />\' + $("div#umm-add-user-fields").html());
           var is_duplicate = function(obj, key, value){
             var request = $.ajax({
                 url: \'admin-ajax.php?action=umm_switch_action&umm_sub_action=umm_is_duplicate&echo=true&umm_key=\' + key + \'&umm_value=\' + value,
@@ -1428,6 +1428,10 @@ function umm_show_profile_fields($echo=true, $fields=false, $mode='profile', $fo
       $profile_fields = $new_array;   
     endif;
     
+    if(!$form_id):
+       $form_id = 'your-profile';
+    endif;
+    
     $html_before = (!isset($umm_settings['html_before_' . $mode]) || empty($umm_settings['html_before_' . $mode])) ? '<h3 class="umm-custom-fields">[section-title]</h3>
 <table class="form-table umm-custom-fields">
    <tbody>' : stripslashes(htmlspecialchars_decode($umm_settings['html_before_' . $mode]));
@@ -2200,12 +2204,23 @@ function umm_usermeta_shortcode($atts, $content) {
        foreach($show_fields as $field => $field_name):
           if(array_key_exists($field_name, $umm_data) && isset($_POST[$field_name])):
              $form = $_POST['umm_form'];
-             $posted_value = addslashes(htmlspecialchars(trim($_POST[$field_name])));
-             if($posted_value != ""):
-                $val = (is_numeric($posted_value) && floor($posted_value) == $posted_value) ? sprintf("%d", $posted_value) : sprintf("%s", $posted_value);
-             else:
-                $val = "";
-             endif;
+             
+             $posted_value = (!is_array($_POST[$field_name])) ? addslashes(htmlspecialchars(trim($_POST[$field_name]))) : $_POST[$field_name];
+                if($posted_value != "" && !is_array($posted_value)):
+                   $val = (is_numeric($posted_value) && floor($posted_value) == $posted_value) ? sprintf("%d", $posted_value) : sprintf("%s", $posted_value);
+                elseif(is_array($posted_value)):
+                   // This is a checkbox group
+                   $val = array();
+                   foreach($posted_value  as $key => $value):
+                      $save_value = (is_numeric($value) && floor($value) == $value) ? sprintf("%d", $value) : sprintf("%s", $value);
+                      $val[$key] = $save_value;
+                   endforeach;
+                else:
+                   $val = "";
+                endif;
+                $val = (is_array($val)) ? implode(', ', $val) : $val;
+             
+             
              if($profile_fields[$field_name]['unique'] == 'yes' && $val != ""):
                 if(umm_is_duplicate($field_name, $val, $current_user->ID)):
                    $umm_error = true;
