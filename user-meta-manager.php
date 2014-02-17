@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: https://github.com/jasonlau/Wordpress-User-Meta-Manager
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages and more. <strong>Get the Pro extension <a href="http://jasonlau.biz/home/membership-options#umm-pro">here</a>.</strong>
- * Version: 3.2.0
+ * Version: 3.2.1
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '3.2.0');
+define('UMM_VERSION', '3.2.1');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -1310,7 +1310,9 @@ function umm_query_shortcode($atts, $content){
              foreach($list as $key):
                 $k = trim($key);
                 $formatted_key = umm_format_text(str_replace('_', ' ', $k), $key_format);
-                $formatted_value = umm_format_text(stripslashes($d->$k), $value_format);
+                $value = maybe_unserialize($d->$k);
+                $val = (is_array($value)) ? implode(", ", $value) : $value;
+                $formatted_value = umm_format_text(stripslashes($val), $value_format);
                 $i = str_replace('%v', $formatted_value, $item);
                 if(isset($labels[$x]) && !empty($labels[$x])):
                    $output .= str_replace('%k', $labels[$x], $i);
