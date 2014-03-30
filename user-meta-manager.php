@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: https://github.com/jasonlau/Wordpress-User-Meta-Manager
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages and more. <strong>Get the Pro extension <a href="http://jasonlau.biz/home/membership-options#umm-pro">here</a>.</strong>
- * Version: 3.2.8
+ * Version: 3.2.9
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '3.2.8');
+define('UMM_VERSION', '3.2.9');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -1869,6 +1869,22 @@ function umm_update_columns(){
     
                 case "usermeta":
                 $usermeta_columns = (!umm_get_option("usermeta_columns")) ? array() : umm_get_option("usermeta_columns");
+                $num_users_data = $wpdb->get_results("SELECT COUNT(*) AS total_users FROM " . $wpdb->users);
+                $num_users = $num_users_data[0]->total_users;
+                $num_users_meta = $wpdb->get_results("SELECT COUNT(*) AS total_meta_users FROM " . $wpdb->usermeta);
+                $num_meta_users = $num_users_meta[0]->total_meta_users;
+                // Check if all users have this meta_key, in case another plugin is managing user meta
+                if($num_users != $num_meta_users):
+                   // Sync - assign all users this meta key if it does not exist for all users
+                   $userdata = umm_get_users();
+                   foreach($userdata as $user):
+                      $test = get_user_meta($user->ID, $umm_column_key);
+                      if(!$test):
+                         update_user_meta($user->ID, $umm_column_key, '');
+                      endif;
+                   endforeach;
+                endif;
+                
                 $usermeta_columns[$umm_column_key] = $umm_column_label;
                 umm_update_option("usermeta_columns", $usermeta_columns);
                 break;
@@ -2056,7 +2072,11 @@ function umm_update_user_meta(){
                // Insert new key for all users and add new profile field if needed
                $data = umm_get_users();
                foreach($data as $user):
-                  update_user_meta($user->ID, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
+                  // Don't overwrite any existing meta data if $duplicate_override is on.
+                  $exists = get_user_meta($user->ID, $meta_key[0], true);
+                  if(!$exists):
+                     update_user_meta($user->ID, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
+                  endif;
                endforeach;
                // Add new meta data to custom meta array
                $umm_data[$meta_key[0]] = $meta_value[0];
@@ -2069,8 +2089,12 @@ function umm_update_user_meta(){
             break;
             
             default:
-               // Insert key for single user - no profile field settings here
-               update_user_meta($u, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
+               // Don't overwrite any existing meta data if $duplicate_override is on.
+               $exists = get_user_meta($u, $meta_key[0], true);
+               if(!$exists):
+                  // Insert key for single user - no profile field settings here
+                  update_user_meta($u, $meta_key[0], maybe_unserialize(trim(stripslashes($meta_value[0]))), false);
+               endif;
                // Add key to singles array
                if(!in_array($meta_key[0], $umm_singles_data)):
                   array_push($umm_singles_data, $meta_key[0]);
