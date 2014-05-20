@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: https://github.com/jasonlau/Wordpress-User-Meta-Manager
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages and more. <strong>Get the Pro extension <a href="http://jasonlau.biz/home/membership-options#umm-pro">here</a>.</strong>
- * Version: 3.3.5
+ * Version: 3.3.6
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,7 +31,7 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '3.3.5');
+define('UMM_VERSION', '3.3.6');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
@@ -1680,6 +1680,8 @@ function umm_show_profile_fields($echo=true, $fields=false, $mode='profile', $fo
     if(umm_is_pro() && isset($profile_field_settings['display']) && is_array($profile_field_settings['display']) && in_array('profile', $profile_field_settings['display']) && $mode == 'profile'):
        $output .= $html_during;
     elseif(umm_is_pro() && isset($profile_field_settings['display']) && is_array($profile_field_settings['display']) && in_array('register', $profile_field_settings['display']) && $mode == 'register'):
+       $output .= $html_during;
+    elseif($mode == 'adduser'):
        $output .= $html_during;
     elseif(!umm_is_pro() || (umm_is_pro() && !isset($profile_field_settings['display']) || $mode == 'shortcode')):
        $output .= $html_during;
