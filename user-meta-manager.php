@@ -4,7 +4,7 @@
  * Plugin Name: User Meta Manager
  * Plugin URI: https://github.com/jasonlau/Wordpress-User-Meta-Manager
  * Description: Add, edit, or delete user meta data with this handy plugin. Easily restrict access or insert user meta data into posts or pages and more. <strong>Get the Pro extension <a href="http://jasonlau.biz/home/membership-options#umm-pro">here</a>.</strong>
- * Version: 3.4.1
+ * Version: 3.4.2
  * Author: Jason Lau
  * Author URI: http://jasonlau.biz
  * Text Domain: user-meta-manager
@@ -31,11 +31,11 @@
     exit('Please don\'t access this file directly.');
 }
 
-define('UMM_VERSION', '3.4.1');
+define('UMM_VERSION', '3.4.2');
 define("UMM_PATH", plugin_dir_path(__FILE__) . '/');
 define("UMM_SLUG", "user-meta-manager");
 define("UMM_AJAX", "admin-ajax.php?action=umm_switch_action&amp;umm_sub_action=");
-// error_reporting(E_ALL);
+//error_reporting(E_ALL);
 include(UMM_PATH . 'includes/umm-table.php');
 include(UMM_PATH . 'includes/umm-contextual-help.php');
 
@@ -152,7 +152,7 @@ function umm_backup($backup_mode=false, $tofile=false, $print=true){
     $mode = (empty($backup_mode)) ? $mode : $backup_mode;
     if(umm_is_pro() && $mode == 'pro'):
        if(function_exists('umm_pro_backup')):
-          call_user_func('umm_pro_backup');
+          umm_pro_backup();
           exit;
        endif; 
     endif;    
@@ -282,7 +282,7 @@ function umm_backup_page(){
     $output .= '</div>';
     if(umm_is_pro()):
        if(function_exists('umm_pro_backup_page')):
-          $output .= call_user_func('umm_pro_backup_page');       
+          $output .= umm_pro_backup_page();       
        endif; 
     endif;
     $output .= '</div>';
@@ -312,7 +312,8 @@ function umm_column_exists($key){
 function umm_get_option($which=false){
     if($umm_data = get_option('user_meta_manager_data')):
        if($which):
-          return $umm_data[$which];
+          $which_data = (isset($umm_data[$which])) ? $umm_data[$which] : '';
+          return $which_data;
        else:
          return $umm_data;
        endif;
@@ -812,10 +813,16 @@ function umm_get_profile_fields($output_type='array'){
 function umm_get_users($query=false){
     global $wpdb;
     $umm_settings = umm_get_option('settings');
-    $max_users = (!isset($umm_settings['max_users']) || empty($umm_settings['max_users']) || $umm_settings['max_users']>100) ? 100 : $umm_settings['max_users'];
-    if(!$query):
-       $query = "SELECT * FROM " . $wpdb->users . " LIMIT 0, " . $max_users;
-    endif;     
+    if(umm_is_pro()):
+       if(!$query):
+          $query = "SELECT * FROM " . $wpdb->users;
+       endif;
+    else:
+       if(!$query):
+          $query = "SELECT * FROM " . $wpdb->users . " LIMIT 0, " . $umm_settings['max_users'];
+       endif;
+    endif;
+         
     $data = $wpdb->get_results($query);   
     if(defined('MULTISITE') && MULTISITE):
        $blog_id = get_current_blog_id();
@@ -1133,6 +1140,10 @@ function umm_profile_field_editor($umm_edit_key=null){
     $label = (!isset($label) || empty($label)) ? '' : $label;
     $attrs = (!isset($attrs) || empty($attrs)) ? '' : $attrs;
     $after = (!isset($after) || empty($after)) ? '' : $after;
+    $allow_tags = (!isset($allow_tags) || empty($allow_tags)) ? 'yes' : $allow_tags;
+    $unique_value = (!isset($unique_value) || empty($unique_value)) ? 'no' : $unique_value;
+    $allow_multi = (!isset($allow_multi) || empty($allow_multi)) ? 'no' : $allow_multi;
+    $size = (!isset($size) || empty($size)) ? '' : $size;
     $required = (!isset($required) || empty($required)) ? '' : $required;
     $add_to_profile = (!isset($add_to_profile) || empty($add_to_profile)) ? '' : $add_to_profile;
     $class = (!isset($class) || empty($class)) ? '' : $class;
@@ -1298,7 +1309,8 @@ function umm_profile_field_editor($umm_edit_key=null){
     </select>';
     if(umm_is_pro()):
        if(function_exists('umm_pro_profile_editor_fields')):
-          $output .= call_user_func('umm_pro_profile_editor_fields', $profile_fields[$umm_edit_key]);
+          $edit_key = (isset($profile_fields[$umm_edit_key])) ? $profile_fields[$umm_edit_key] : false;
+          $output .= umm_pro_profile_editor_fields($edit_key);
        endif; 
     endif; 
     $output .= '</div>';  
@@ -2156,7 +2168,7 @@ function umm_update_profile_fields_settings($meta_key, $meta_value){
 function umm_update_settings(){
     if(umm_is_pro()):
        if(function_exists('umm_pro_update_settings')):
-          $output = call_user_func('umm_pro_update_settings', $_POST);
+          $output = umm_pro_update_settings($_POST);
        endif;     
     else:
        umm_update_option('settings', $_POST);
@@ -2473,7 +2485,7 @@ function umm_usermeta_keys_menu($select=true, $optgroup=false, $include_used=fal
         break;
         
         default:
-        $output .= '<option value="' . $d->meta_key . '|usermeta">' . $d->meta_key . '</option>' . "\n";
+        //$output .= '<option value=""></option>' . "\n";
         break;
         
     }  
@@ -2613,7 +2625,7 @@ function umm_usermeta_shortcode($atts, $content) {
              
              if(umm_is_pro()):
                 if(function_exists('umm_pro_validate_profile_field')):              
-                   $error .= call_user_func('umm_pro_validate_profile_field', $field_name, $profile_fields[$field_name], $val, false);
+                   $error .= umm_pro_validate_profile_field($field_name, $profile_fields[$field_name], $val, false);
                    if(!empty($error)):
                       $umm_error = true;
                    endif;
@@ -2660,7 +2672,7 @@ function umm_usermeta_shortcode($atts, $content) {
          endif;
          if(umm_is_pro()):
             if(function_exists('umm_pro_redirect')):
-               call_user_func('umm_pro_redirect', $atts);
+               umm_pro_redirect($atts);
             endif; 
        endif;
        endif; // !$umm_error
@@ -2756,7 +2768,7 @@ function umm_validate_profile_fields($errors, $update, $user) {
          endif;
          if(umm_is_pro()):
             if(function_exists('umm_pro_validate_profile_field')):
-               call_user_func('umm_pro_validate_profile_field', $field_name, $field_settings, $field_value, $errors);
+               umm_pro_validate_profile_field($field_name, $field_settings, $field_value, $errors);
             endif; 
          endif;   
        endforeach;
@@ -2775,7 +2787,7 @@ function umm_validate_registration_fields($errors, $sanitized_user_login, $user_
          endif; 
          if(umm_is_pro()):
             if(function_exists('umm_pro_validate_profile_field')):
-               call_user_func('umm_pro_validate_profile_field', $field_name, $field_settings, $field_value, $errors);
+               umm_pro_validate_profile_field($field_name, $field_settings, $field_value, $errors);
             endif; 
          endif;  
        endforeach;
