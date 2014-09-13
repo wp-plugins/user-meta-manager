@@ -4,8 +4,8 @@ Contributors: Jason Lau
 Donate link: http://jasonlau.biz
 Tags: user, users, meta, usermeta, wp_usermeta, data, table, database, edit, add, update, delete, save, saved, list, manage, manager, management, customize, custom, create, activate, register, registers, short, tag, short code, member, members, admin, administrate, administrator, administrative, tool, plugin, module, addon, jason, lau, jasonlau, jasonlau.biz, profile, field, fields, extra
 Requires at least: 3.3.1
-Stable tag: 3.4.3
-Tested up to: 4.0.0
+Stable tag: 3.3.2
+Tested up to: 3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,39 +66,6 @@ Yes I do. Check my website at JasonLau.biz.
 1. screenshot-1.png The User Meta Manager Home screen.
 
 == Changelog ==
-
-= 3.4.3 =
-Cleaned some code. Verified compatibility with WordPress 4.0.
-
-= 3.4.2 =
-Fixed a couple of bugs. Cleaned some code.
-
-= 3.4.1 =
-Fixed a bug. Added the field type Random String to the Pro version, in addition to some other features.
-
-= 3.4.0 =
-Fixed a bug in the json short code. View the documentation for the correct format for this short code option.
-
-= 3.3.9 =
-Fixed a bug in the json short code.
-
-= 3.3.8 =
-Fixed a bug in the json short code, and a couple of JS bugs.
-
-= 3.3.7 =
-Fixed a bug that caused default values to be overwritten in non-profile fields.
-
-= 3.3.6 =
-Fixed a bug that prevented some custom fields from displaying in the Add User screen.
-
-= 3.3.5 =
-Removed user-meta-manager/includes/umm-csv.php
-
-= 3.3.4 =
-Changed how csv backup is called.
-
-= 3.3.3 =
-Changed the HTML output slightly to resolve a potential conflict with other plugins.
 
 = 3.3.2 =
 Fixed a bug in the Add Custom Meta process.
@@ -563,36 +530,3 @@ Default values are only set if the field is not a profile field.
 
 = 3.3.2 =
 Fixed a bug in the Add Custom Meta process.
-
-= 3.3.3 =
-Changed the HTML output slightly to resolve a potential conflict with other plugins.
-
-= 3.3.4 =
-Changed how csv backup is called.
-
-= 3.3.5 =
-Removed user-meta-manager/includes/umm-csv.php
-
-= 3.3.6 =
-Fixed a bug that prevented some custom fields from displaying in the Add User screen.
-
-= 3.3.7 =
-Fixed a bug that caused default values to be overwritten in non-profile fields.
-
-= 3.3.8 =
-Fixed a bug in the json short code, and a couple of JS bugs.
-
-= 3.3.9 =
-Fixed a bug in the json short code.
-
-= 3.4.0 =
-Fixed a bug in the json short code. View the documentation for the correct format for this short code option.
-
-= 3.4.1 =
-Fixed a bug. Added the field type Random String to the Pro version, in addition to some other features.
-
-= 3.4.2 =
-Fixed a couple of bugs. Cleaned some code.
-
-= 3.4.3 =
-Cleaned some code. Verified compatibility with WordPress 4.0.
