@@ -5,9 +5,17 @@
  */
  
  jQuery(function($){
-        var page_data = $("div.umm-wrapper").data();
+        var page_data = $("div.umm-wrapper").data(),
+        reload_home = function(){
+            /* v 3.3.8 */
+            $("div#umm-home").load(location.href + " div#umm-home", function(){                
+                $("div#umm-home div.tablenav.top div.actions").html($("div.umm-per-page-menu").html());
+                $("div#umm-search select.umm-search-mode").replaceWith($("div#umm-home select.umm-search-mode"));
+            });
+            
+        };
         $("div.actions").first().prepend($("div.umm-per-page-menu").html());
-        $("div.umm-per-page-menu").html('');
+        //$("div.umm-per-page-menu").html(''); // depreciated v 3.3.8
         $("#get-search-input").after($("div.umm-search-mode-menu").html());
        
        $(".umm-go").each(function(){
@@ -170,11 +178,8 @@
         
         $.post('admin-ajax.php?action=umm_switch_action&umm_sub_action=' + d.subpage, $("#" + d.form).serialize(), function(data){
             
-            $("div.umm-result-container").load(location.href + " div#umm-home", function(){                
-                $("table.umm-users").replaceWith($("div.umm-result-container table.umm-users"));
-                $("div#umm-search select.umm-search-mode").replaceWith($("div.umm-result-container select.umm-search-mode"));
-                $("div.umm-result-container").html('');
-            });
+            reload_home(); /* v 3.3.8 */
+            
             $("div.umm-subpage").load(return_page, function(){
                 
                 if(data){
@@ -205,11 +210,8 @@
         
         $.post('admin-ajax.php?action=umm_switch_action&umm_sub_action=' + d.subpage, $("#" + d.form).serialize(), function(data){
             
-            $("div.umm-result-container").load(location.href + " div#umm-home", function(){                
-                $("table.umm-users").replaceWith($("div.umm-result-container table.umm-users"));
-                $("div#umm-search select.umm-search-mode").replaceWith($("div.umm-result-container select.umm-search-mode"));
-                $("div.umm-result-container").html('');
-            });
+            reload_home(); /* v 3.3.8 */
+            
             $("div.umm-subpage").load(return_page, function(){
                 if(data){
                     $('div.umm-message').html(data).fadeIn('slow').delay(5000).fadeOut('slow');
@@ -243,11 +245,8 @@
         
         $.post('admin-ajax.php?action=umm_switch_action&umm_sub_action=' + d.subpage, $("#" + d.form).serialize(), function(data){
             
-            $("div.umm-result-container").load(location.href + " div#umm-home", function(){                
-                $("table.umm-users").replaceWith($("div.umm-result-container table.umm-users"));
-                $("div#umm-search select.umm-search-mode").replaceWith($("div.umm-result-container select.umm-search-mode"));
-                $("div.umm-result-container").html('');
-            });
+            reload_home(); /* v 3.3.8 */
+            
             $("div.umm-subpage").load(return_page, function(){
                 
                 if(data){
@@ -278,13 +277,9 @@
         
         $.post('admin-ajax.php?action=umm_switch_action&umm_sub_action=' + d.subpage, $("#" + d.form).serialize(), function(data){
             
-            $("div.umm-result-container").load(location.href + " div#umm-home", function(){                
-                $("table.umm-users").replaceWith($("div.umm-result-container table.umm-users"));
-                $("div#umm-search select.umm-search-mode").replaceWith($("div.umm-result-container select.umm-search-mode"));
-                $("div.umm-result-container").html('');
-            });
-            $("div.umm-subpage").load(return_page, function(){
-                
+            reload_home(); /* v 3.3.8 */
+            
+            $("div.umm-subpage").load(return_page, function(){               
                 if(data){
                     $('div.umm-message').html(data).fadeIn('slow').delay(5000).fadeOut('slow');
                 } 
@@ -312,7 +307,7 @@
     });
     
     $(document).on('change', "select.umm-profile-field-type", function(){
-        $(".umm-profile-field-options").fadeOut('slow');
+        $(".umm-profile-field-options, .umm-input-options-sub").fadeOut('slow');
         switch($(this).val()){
             case 'text':
             case 'color':
@@ -329,33 +324,41 @@
             case 'url':
             case 'week':
             case 'textarea':
-            $(".umm-input-options").fadeIn('slow');
-            $(".umm-checkbox-options").fadeOut();
+            $(".umm-input-options, .umm-input-options-sub").fadeIn('slow');
+            $(".umm-checkbox-options, .umm-random-string-options").fadeOut();
             break;
             
             case 'checkbox':
-            $(".umm-input-options").fadeIn('slow');
+            $(".umm-input-options, .umm-input-options-sub").fadeIn('slow');
+            $(".umm-random-string-options").fadeOut();
             $(".umm-checkbox-options").fadeIn('slow');
             break;
                        
             case 'radio':
             case 'checkbox_group':
-            $(".umm-input-options").fadeIn('slow');
-            $(".umm-checkbox-options").fadeOut();
+            $(".umm-input-options, .umm-input-options-sub").fadeIn('slow');
+            $(".umm-checkbox-options, .umm-random-string-options").fadeOut();
             $(".umm-select-options").fadeIn('slow');
             $(".umm-remove-option:first").hide();
             break;
             
             case 'select':
-            $(".umm-input-options").fadeIn('slow');
-            $(".umm-checkbox-options").fadeOut();
+            $(".umm-input-options, .umm-input-options-sub").fadeIn('slow');
+            $(".umm-checkbox-options, .umm-random-string-options").fadeOut();
             $(".umm-select-multi-options").fadeIn('slow');
             $(".umm-select-options").fadeIn('slow');
             $(".umm-remove-option:first").hide();
             break;
             
+            case 'random_string':
+            $(".umm-input-options").fadeIn('slow');
+            $(".umm-random-string-options").fadeIn('slow');
+            $(".umm-input-options-sub").fadeOut();
+            $("select[name='umm_add_to_profile'] option[value='no']").prop('selected', true);
+            break;
+            
             default:
-            $(".umm-checkbox-options").fadeOut();
+            $(".umm-checkbox-options, .umm-random-string-options").fadeOut();
             $(".umm-profile-field-options").fadeOut('slow');         
         }
     });
